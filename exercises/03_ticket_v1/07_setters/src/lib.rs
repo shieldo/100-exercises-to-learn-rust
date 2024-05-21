@@ -2,8 +2,6 @@
 //   Make sure to enforce the same validation rules you have in `Ticket::new`!
 //   Even better, extract that logic into private methods and reuse it in both places.
 
-use std::os::linux::raw::stat;
-
 pub struct Ticket {
     title: String,
     description: String,
