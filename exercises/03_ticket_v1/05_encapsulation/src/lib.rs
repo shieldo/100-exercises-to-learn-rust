@@ -34,6 +34,17 @@ pub mod ticket {
         //  - `title` that returns the `title` field.
         //  - `description` that returns the `description` field.
         //  - `status` that returns the `status` field.
+        pub(crate) fn title(&self) -> &str {
+            &self.title
+        }
+
+        pub(crate) fn description(&self) -> &str {
+            &self.description
+        }
+
+        pub(crate) fn status(&self) -> &str {
+            &self.status
+        }
     }
 }
 

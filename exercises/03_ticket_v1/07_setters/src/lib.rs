@@ -2,6 +2,8 @@
 //   Make sure to enforce the same validation rules you have in `Ticket::new`!
 //   Even better, extract that logic into private methods and reuse it in both places.
 
+use std::os::linux::raw::stat;
+
 pub struct Ticket {
     title: String,
     description: String,
@@ -10,21 +12,9 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
-        if title.is_empty() {
-            panic!("Title cannot be empty");
-        }
-        if title.len() > 50 {
-            panic!("Title cannot be longer than 50 characters");
-        }
-        if description.is_empty() {
-            panic!("Description cannot be empty");
-        }
-        if description.len() > 500 {
-            panic!("Description cannot be longer than 500 characters");
-        }
-        if status != "To-Do" && status != "In Progress" && status != "Done" {
-            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
-        }
+        Self::ensure_title(&title);
+        Self::ensure_description(&description);
+        Self::ensure_status(&status);
 
         Ticket {
             title,
@@ -43,6 +33,45 @@ impl Ticket {
 
     pub fn status(&self) -> &String {
         &self.status
+    }
+
+    pub fn set_title(&mut self, title: String) {
+        Self::ensure_title(&title);
+        self.title = title;
+    }
+
+    pub fn set_description(&mut self, description: String) {
+        Self::ensure_description(&description);
+        self.description = description;
+    }
+
+    pub fn set_status(&mut self, status: String) {
+        Self::ensure_status(&status);
+        self.status = status;
+    }
+
+    fn ensure_title(title: &str) {
+        if title.is_empty() {
+            panic!("Title cannot be empty");
+        }
+        if title.len() > 50 {
+            panic!("Title cannot be longer than 50 characters");
+        }
+    }
+
+    fn ensure_description(description: &str) {
+        if description.is_empty() {
+            panic!("Description cannot be empty");
+        }
+        if description.len() > 500 {
+            panic!("Description cannot be longer than 500 characters");
+        }
+    }
+
+    fn ensure_status(status: &str) {
+        if status != "To-Do" && status != "In Progress" && status != "Done" {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
     }
 }
 
